@@ -15,12 +15,10 @@ const createCustomElement = (element, className, innerText) => {
 const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
   return section;
 };
 
@@ -38,4 +36,16 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-window.onload = () => { };
+const showingResults = async (products) => {
+    const fatherItems = document.querySelector('.items');
+    return fetchProducts(products)
+    .then((data) => data.results
+    .forEach((product) => {
+    const objItem = { sku: product.id, name: product.title, image: product.thumbnail };
+    fatherItems.appendChild(createProductItemElement(objItem));
+    }));
+  };
+
+  window.onload = () => {
+  showingResults('computador');
+};
