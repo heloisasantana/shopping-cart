@@ -12,8 +12,10 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+const fatherCart = document.querySelector('.cart__items');
+
 const cartItemClickListener = (event) => {
-  // coloque seu código aqui
+  fatherCart.removeChild(event.target);
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -32,7 +34,6 @@ const createProductItemElement = ({ sku, name, image }) => {
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'))
   .addEventListener('click', async () => {
-    const fatherCart = document.querySelector('.cart__items');
     const pickedItem = await fetchItem(sku);
     const objItem = { sku: pickedItem.id, name: pickedItem.title, salePrice: pickedItem.price };
     fatherCart.appendChild(createCartItemElement(objItem));
