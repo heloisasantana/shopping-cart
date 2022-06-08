@@ -12,18 +12,6 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
-  const section = document.createElement('section');
-  section.className = 'item';
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  return section;
-};
-
-const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
-
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
 };
@@ -36,13 +24,31 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const createProductItemElement = ({ sku, name, image }) => {
+  const section = document.createElement('section');
+  section.className = 'item';
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'))
+  .addEventListener('click', async () => {
+    const fatherCart = document.querySelector('.cart__items');
+    const pickedItem = await fetchItem(sku);
+    const objItem = { sku: pickedItem.id, name: pickedItem.title, salePrice: pickedItem.price };
+    fatherCart.appendChild(createCartItemElement(objItem));
+  });
+  return section;
+};
+
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+
 const showingResults = async (products) => {
     const fatherItems = document.querySelector('.items');
     return fetchProducts(products)
     .then((data) => data.results
     .forEach((product) => {
-    const objItem = { sku: product.id, name: product.title, image: product.thumbnail };
-    fatherItems.appendChild(createProductItemElement(objItem));
+    const objProduct = { sku: product.id, name: product.title, image: product.thumbnail };
+    fatherItems.appendChild(createProductItemElement(objProduct));
     }));
   };
 
