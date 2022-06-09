@@ -19,6 +19,13 @@ let sum = 0;
 const sumItemsCart = createCustomElement('h4', 'total-price', sum);
 fatherCart.appendChild(sumItemsCart);
 
+const buttonClearCart = document.querySelector('.empty-cart');
+buttonClearCart.addEventListener('click', () => {
+// Referência utilizada para usar o innerHTML = '' para remover os elementos filhos dessa <ol> (Ordered List): https://pt.stackoverflow.com/questions/441373/como-remover-todos-os-elementos-de-uma-div-em-javascript#:~:text=Para%20remover%20de%20uma%20s%C3%B3,do%20elemento%20pelo%20valor%20fornecido;
+  fatherCartItems.innerHTML = '';
+  sumItemsCart.innerText = (Math.round((sum -= sum) * 100) / 100);
+}); 
+
 const cartItemClickListener = (event) => {
   fatherCartItems.removeChild(event.target);
 };
